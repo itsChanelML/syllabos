@@ -88,7 +88,7 @@ After a few weeks SyllaClaw knows you work best Wednesday mornings, that your St
 ### Step 1 — Get your free NVIDIA NIM key
 1. Go to [build.nvidia.com](https://build.nvidia.com)
 2. Sign in or create a free account
-3. Search for `llama-3.3-nemotron-super-49b-v1`
+3. Search for `llama-3.2-90b-vision-instruct`
 4. Click **Get API Key** — your key starts with `nvapi-`
 
 ### Step 2 — Clone and install
@@ -251,7 +251,7 @@ SyllaClaw will never schedule a study block during a shift. Work hours are locke
 
 ## How the weekly schedule is built
 
-SyllaClaw uses NVIDIA's Llama-3.3-Nemotron-Super model via NIM to reason over your full week:
+SyllaClaw uses Meta's Llama 3.2 90B model via NVIDIA NIM to reason over your full week, one day at a time:
 
 | What | How |
 |------|-----|
