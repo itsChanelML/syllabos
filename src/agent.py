@@ -107,8 +107,8 @@ class SyllaClawAgent:
             try:
                 deadlines = parse_syllabus(
                     self.api_key, text, course_name,
-                    semester_start="2026-01-12",
-                    semester_end="2026-05-15"
+                    semester_start="2026-08-24",
+                    semester_end="2026-12-12"
                 )
                 self.all_deadlines.extend(deadlines)
                 exam_count = sum(1 for d in deadlines if d.get("type") == "exam")

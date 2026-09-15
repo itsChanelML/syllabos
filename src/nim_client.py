@@ -11,7 +11,7 @@ from typing import Any, Optional
 
 import requests
 
-MODEL    = "nvidia/llama-3.3-nemotron-super-49b-v1"
+MODEL    = "meta/llama-3.2-90b-vision-instruct"
 ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions"
 TIMEOUTS = [120, 150, 180]
 
@@ -149,24 +149,30 @@ SCHEDULE:
     return data
 
 
-def build_weekly_schedule(api_key: str, student_name: str, week_start: str,
-                           deadlines: list, work_shifts: list,
-                           student_orgs: list = None,
-                           wake_time: str = "07:00",
-                           sleep_time: str = "23:00") -> list:
+DAY_NAMES         = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+FAMILY_CALL_DAYS  = {"Monday", "Thursday"}
+PROTECTED_FREE_DAY = "Saturday"
+
+
+def _build_day_schedule(api_key: str, student_name: str, day_name: str, day_date: str,
+                         deadlines: list, day_shifts: list, student_orgs: list,
+                         wake_time: str, sleep_time: str,
+                         include_family_call: bool, include_protected_free: bool,
+                         include_weekly_review: bool) -> list:
     """
-    Build a complete time-blocked weekly schedule.
-    Returns a list of time block dicts.
+    Build one day's time blocks. Called once per day by build_weekly_schedule
+    so each NIM call stays small and fast instead of one call for the whole week.
     """
-    student_orgs = student_orgs or []
+    from datetime import datetime
 
     deadlines_str = ""
     for d in deadlines[:20]:
         try:
-            from datetime import datetime
             due = datetime.strptime(d.get("date",""), "%Y-%m-%d")
-            ws  = datetime.strptime(week_start, "%Y-%m-%d")
-            days_away = (due - ws).days
+            today = datetime.strptime(day_date, "%Y-%m-%d")
+            days_away = (due - today).days
+            if days_away < 0:
+                continue
             urgency = f" ⚠ DUE IN {days_away} DAYS" if days_away <= 7 else (f" (due in {days_away} days)" if days_away <= 14 else "")
         except Exception:
             urgency = ""
@@ -177,42 +183,49 @@ def build_weekly_schedule(api_key: str, student_name: str, week_start: str,
         )
 
     shifts_str = "\n".join(
-        f"- {s.get('day','')}: {s.get('start_time','')} – {s.get('end_time','')} ({s.get('hours',0)} hrs)"
-        for s in work_shifts
-    ) or "No work shifts"
+        f"- {s.get('start_time','')} – {s.get('end_time','')} ({s.get('hours',0)} hrs)"
+        for s in day_shifts
+    ) or "No work shift today"
 
     orgs_str = "\n".join(f"- {o}" for o in student_orgs) or "None"
 
-    prompt = f"""You are a smart academic advisor building a weekly schedule for a college student.
-Build a complete, realistic weekly schedule for {student_name}.
+    extra_rules = []
+    if include_family_call:
+        extra_rules.append('Add exactly one 10-minute family call block today, title: "Call home 📱".')
+    if include_protected_free:
+        extra_rules.append('Protect one 2-hour completely free/social block today — title "Free time — protect this".')
+    else:
+        extra_rules.append("Protect at least one free/social block today if it's not a full work day.")
+    if include_weekly_review:
+        extra_rules.append('Add a "Weekly Review" block this evening — 30 minutes to plan next week.')
+    extra_rules_str = "\n".join(f"{i+7}. {r}" for i, r in enumerate(extra_rules))
 
-Week of: {week_start} (Monday through Sunday)
-Wake time: {wake_time} every day
-Bedtime: {sleep_time} every night
+    prompt = f"""You are a smart academic advisor building ONE DAY of a college student's weekly schedule.
 
-UPCOMING DEADLINES:
-{deadlines_str or "None this week"}
+Student: {student_name}
+Day: {day_name}, {day_date}
+Wake time: {wake_time}
+Bedtime: {sleep_time}
 
-WORK SHIFTS (non-negotiable — never schedule anything during these):
+UPCOMING DEADLINES (from today onward):
+{deadlines_str or "None in the next two weeks"}
+
+WORK SHIFT TODAY (non-negotiable — never schedule anything during this):
 {shifts_str}
 
 STUDENT ORGANIZATIONS:
 {orgs_str}
 
 RULES:
-1. Work shifts are locked — never overlap them
+1. Work shift is locked — never overlap it
 2. Sleep is locked — nothing before wake time or after bedtime
 3. Study blocks: use 25-min Pomodoro for memorization/reading, 90-min deep work for problem sets/projects
-4. Prioritize study time for items due soonest — more blocks closer to deadlines
-5. Add a review session the evening BEFORE any exam
-6. Protect at least one 2-hour free/social block per day on non-work days
-7. Add 2–3 family call blocks per week — exactly 10 minutes each, title: "Call home 📱"
-8. Add meals: Breakfast 30 min, Lunch 45 min, Dinner 45 min
-9. Leave at least one free morning or afternoon completely unscheduled per week — title: "Free time — protect this"
-10. Add a "Weekly Review" block Sunday evening — 30 minutes to plan next week
+4. Prioritize study time for items due soonest
+5. If an exam is due tomorrow, add a review session this evening
+6. Add meals: Breakfast 30 min, Lunch 45 min, Dinner 45 min
+{extra_rules_str}
 
-Return a JSON array of time blocks. Each block:
-- day: full day name (Monday–Sunday)
+Return a JSON array of time blocks for TODAY ONLY. Each block:
 - start_time: HH:MM (24-hour)
 - end_time: HH:MM (24-hour)
 - title: descriptive name (e.g. "Study: Thermo Problem Set 3", "Call home 📱", "Free time — protect this")
@@ -223,17 +236,53 @@ Return a JSON array of time blocks. Each block:
 
 Color guide: study=teal, work=amber, sleep=gray, social=green, family=purple, meal=pink, review=coral, free=green
 
-Return ONLY the JSON array. Cover every waking hour from {wake_time} to {sleep_time}.
+Return ONLY the JSON array. Cover every hour from {wake_time} to {sleep_time}.
 Do not leave unaccounted time gaps longer than 30 minutes."""
 
-    raw  = _call(api_key, prompt, max_tokens=3000, temperature=0.15,
-                 system="You are a time management expert. Return only valid JSON arrays.")
+    raw  = _call(api_key, prompt, max_tokens=1500, temperature=0.15)
     data = extract_json(raw)
 
     if not isinstance(data, list):
-        raise ValueError("Expected a JSON array of time blocks")
+        raise ValueError(f"Expected a JSON array of time blocks for {day_name}")
 
     return data
+
+
+def build_weekly_schedule(api_key: str, student_name: str, week_start: str,
+                           deadlines: list, work_shifts: list,
+                           student_orgs: list = None,
+                           wake_time: str = "07:00",
+                           sleep_time: str = "23:00") -> list:
+    """
+    Build a complete time-blocked weekly schedule.
+    Builds one day at a time (7 smaller NIM calls) instead of one call for the
+    whole week — the full-week prompt is too large for the model to complete
+    reliably before timing out.
+    Returns a list of time block dicts.
+    """
+    from datetime import datetime, timedelta
+
+    student_orgs  = student_orgs or []
+    week_start_dt = datetime.strptime(week_start, "%Y-%m-%d")
+
+    all_blocks = []
+    for i, day_name in enumerate(DAY_NAMES):
+        day_date   = (week_start_dt + timedelta(days=i)).strftime("%Y-%m-%d")
+        day_shifts = [s for s in work_shifts if s.get("day") == day_name]
+
+        day_blocks = _build_day_schedule(
+            api_key, student_name, day_name, day_date,
+            deadlines, day_shifts, student_orgs, wake_time, sleep_time,
+            include_family_call=day_name in FAMILY_CALL_DAYS,
+            include_protected_free=(day_name == PROTECTED_FREE_DAY),
+            include_weekly_review=(day_name == "Sunday"),
+        )
+        for b in day_blocks:
+            b["day"] = day_name
+
+        all_blocks.extend(day_blocks)
+
+    return all_blocks
 
 
 def write_weekly_briefing(api_key: str, student_name: str, week_start: str,

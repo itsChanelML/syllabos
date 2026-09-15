@@ -1,19 +1,19 @@
 CS 4820 - Introduction to Machine Learning
-Spring 2026 | Prof. Chen | TTh 2:00-3:15pm
+Fall 2026 | Prof. Chen | TTh 2:00-3:15pm
 
 ASSIGNMENTS AND EXAMS:
 
-Programming Assignment 1 (Linear Regression): Due February 7, 11:59pm
-Reading Quiz 1: February 5, in class
-Programming Assignment 2 (Classification): Due February 28, 11:59pm
-Midterm Exam: March 5, in class 2:00pm — closed book
-Programming Assignment 3 (Neural Networks): Due March 28, 11:59pm
-Reading Quiz 2: March 12, in class
-Programming Assignment 4 (Unsupervised Learning): Due April 18, 11:59pm
-Group Project Checkpoint: April 3, 11:59pm
-Group Project Final Presentation: April 24–26, in class (assigned slots)
-Group Project Report: Due April 30, 11:59pm
-Final Exam: May 8, 1:00-3:00pm, cumulative
+Reading Quiz 1: September 23, in class
+Programming Assignment 1 (Linear Regression): Due September 25, 11:59pm
+Midterm Exam: October 2, in class 2:00pm — closed book
+Programming Assignment 2 (Classification): Due October 16, 11:59pm
+Reading Quiz 2: October 21, in class
+Programming Assignment 3 (Neural Networks): Due November 6, 11:59pm
+Group Project Checkpoint: November 13, 11:59pm
+Programming Assignment 4 (Unsupervised Learning): Due November 20, 11:59pm
+Group Project Final Presentation: December 1–3, in class (assigned slots)
+Group Project Report: Due December 8, 11:59pm
+Final Exam: December 12, 1:00-3:00pm, cumulative
 
 GRADING: Assignments 40% | Quizzes 10% | Midterm 20% | Project 20% | Final 10%
-Teams of 3–4 — form by January 30
+Teams of 3–4 — form by September 11

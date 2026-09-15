@@ -1,32 +1,31 @@
 ENGR 3450 - Engineering Thermodynamics
-Spring 2026 | Prof. Martinez | MWF 10:00-10:50am | Room: ENG 201
+Fall 2026 | Prof. Martinez | MWF 10:00-10:50am | Room: ENG 201
 
 COURSE SCHEDULE AND GRADED ITEMS:
 
-Week 3 (Jan 27): First Law of Thermodynamics
-  Homework 1 DUE: January 31, 11:59pm (5% of grade)
+Week 3 (Sep 7): First Law of Thermodynamics
+  Homework 1 DUE: September 11, 11:59pm (5% of grade)
 
-Week 5 (Feb 10): Second Law and Entropy
-  Homework 2 DUE: February 14, 11:59pm (5%)
-
-Week 6 (Feb 17): MIDTERM EXAM 1 — February 19, in class 10:00am (20%)
+Week 5 (Sep 21): Second Law and Entropy
+  MIDTERM EXAM 1 — September 24, in class 10:00am (20%)
   Covers: Chapters 1–5, closed book, one equation sheet allowed
+  Homework 2 DUE: September 25, 11:59pm (5%)
 
-Week 8 (Mar 3): Vapor Power Systems
-  Homework 3 DUE: March 7, 11:59pm (5%)
+Week 8 (Oct 12): Vapor Power Systems
+  Homework 3 DUE: October 16, 11:59pm (5%)
 
-Week 10 (Mar 17): Combustion and Air-Standard Cycles
-  Homework 4 DUE: March 21, 11:59pm (5%)
+Week 10 (Oct 26): Combustion and Air-Standard Cycles
+  Homework 4 DUE: October 30, 11:59pm (5%)
 
-Week 11 (Mar 24): MIDTERM EXAM 2 — March 26, in class 10:00am (20%)
+Week 11 (Nov 2): MIDTERM EXAM 2 — November 5, in class 10:00am (20%)
   Covers: Chapters 6–9, closed book
 
-Week 12 (Mar 31): Psychrometrics
-  Project Proposal DUE: April 4, 11:59pm (5%)
+Week 12 (Nov 9): Psychrometrics
+  Project Proposal DUE: November 13, 11:59pm (5%)
 
-Week 14 (Apr 14): Project Presentations — April 16 & 18 in class
-  Final Project Report DUE: April 25, 11:59pm (20%)
+Week 14 (Nov 30): Project Presentations — December 2 & 4 in class
+  Final Project Report DUE: December 9, 11:59pm (20%)
 
-FINAL EXAM: May 6, 8:00-10:00am, location TBD (15%)
+FINAL EXAM: December 11, 8:00-10:00am, location TBD (15%)
 
 GRADING: Homework 20% | Midterms 40% | Project 25% | Final 15%
