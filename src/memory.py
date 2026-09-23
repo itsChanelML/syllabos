@@ -1,8 +1,8 @@
 """
-SyllaClaw student memory — learns how you actually live.
+SyllabOS student memory — learns how you actually live.
 
 Stores a student_profile.json that gets updated every Sunday
-when the student runs: python3 syllaclaw.py --checkin
+when the student runs: python3 syllabos.py --checkin
 
 The profile tracks:
 - Study block completion rates by time of day and day of week
@@ -98,7 +98,7 @@ def run_checkin(profile: Dict) -> Dict:
     """
     from display import banner, log_t, log_p, log_g, log_gr, TEAL, PURPLE, GREEN, AMBER, RESET, BOLD, GRAY
 
-    banner("SyllaClaw — Weekly Check-In")
+    banner("SyllabOS — Weekly Check-In")
     print(f"{GRAY}Five quick questions. Takes 2 minutes.{RESET}\n")
 
     checkin = {
@@ -151,10 +151,10 @@ def run_checkin(profile: Dict) -> Dict:
         for overrun in checkin["overruns"]:
             if overrun not in profile["known_overruns"]:
                 profile["known_overruns"].append(overrun)
-        print(f"   {GREEN}✓ Logged — SyllaClaw will add buffer time around these{RESET}\n")
+        print(f"   {GREEN}✓ Logged — SyllabOS will add buffer time around these{RESET}\n")
 
     # Q5 — Anything else?
-    print(f"{TEAL}5. Anything you want SyllaClaw to know for next week?{RESET}")
+    print(f"{TEAL}5. Anything you want SyllabOS to know for next week?{RESET}")
     print(f"{GRAY}   Free text — or press Enter to skip:{RESET}")
     notes = input(f"   {TEAL}>{RESET} ").strip()
     if notes:
@@ -177,7 +177,7 @@ def run_checkin(profile: Dict) -> Dict:
     print()
 
     prefs = profile["inferred_preferences"]
-    print(f"{GRAY}  What SyllaClaw learned about you so far:{RESET}")
+    print(f"{GRAY}  What SyllabOS learned about you so far:{RESET}")
     print(f"  Best study time  : {TEAL}{prefs['best_study_time']}{RESET}")
     print(f"  Study style      : {TEAL}{prefs['study_style']}{RESET}")
     print(f"  Buffer needed    : {TEAL}{prefs['buffer_needed']} min around work shifts{RESET}")
@@ -185,14 +185,14 @@ def run_checkin(profile: Dict) -> Dict:
     if profile["frequently_skipped"]:
         top_skipped = sorted(profile["frequently_skipped"], key=lambda x: x["count"], reverse=True)[:2]
         print(f"  Often skipped    : {AMBER}{', '.join(s['block'] for s in top_skipped)}{RESET}")
-        print(f"  {GRAY}SyllaClaw will reschedule these to better times next week.{RESET}")
+        print(f"  {GRAY}SyllabOS will reschedule these to better times next week.{RESET}")
 
     if profile["new_commitments"]:
         print(f"  New commitments  : {PURPLE}{', '.join(profile['new_commitments'])}{RESET}")
         print(f"  {GRAY}These will be blocked in next week's schedule.{RESET}")
 
     print()
-    print(f"  {TEAL}Run python3 syllaclaw.py to build next week's schedule.{RESET}")
+    print(f"  {TEAL}Run python3 syllabos.py to build next week's schedule.{RESET}")
     print()
 
     return profile

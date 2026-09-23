@@ -1,5 +1,5 @@
 """
-SyllaClaw display helpers — ANSI colors and logging utilities.
+SyllabOS display helpers — ANSI colors and logging utilities.
 """
 
 TEAL   = "\033[38;5;43m"

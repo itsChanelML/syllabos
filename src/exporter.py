@@ -1,5 +1,5 @@
 """
-SyllaClaw CSV exporter.
+SyllabOS CSV exporter.
 Produces Google Calendar-compatible CSV files that can be imported directly.
 
 Google Calendar CSV format requires these columns:
@@ -41,7 +41,7 @@ def export_weekly_schedule(blocks: List[Dict], output_dir: Path,
         date       = block.get("date", "")
         start_time = block.get("start_time", "09:00")
         end_time   = block.get("end_time",   "10:00")
-        title      = block.get("title",      "SyllaClaw Block")
+        title      = block.get("title",      "SyllabOS Block")
         btype      = block.get("type",       "other")
         course     = block.get("course",     "")
         notes      = block.get("notes",      "")
@@ -58,7 +58,7 @@ def export_weekly_schedule(blocks: List[Dict], output_dir: Path,
             continue
 
         # Build description
-        desc_parts = [f"Type: {btype}", "Added by SyllaClaw"]
+        desc_parts = [f"Type: {btype}", "Added by SyllabOS"]
         if course:
             desc_parts.insert(0, f"Course: {course}")
         if notes:
@@ -136,7 +136,7 @@ def export_deadlines(deadlines: List[Dict], output_dir: Path) -> Path:
         if notes:
             desc_parts.append(notes)
         desc_parts.append(f"Estimated study time: {hours} hour(s)")
-        desc_parts.append("Added by SyllaClaw")
+        desc_parts.append("Added by SyllabOS")
 
         rows.append({
             "Subject":       subject,

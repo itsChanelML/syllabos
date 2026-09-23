@@ -1,5 +1,5 @@
 /**
- * SyllaClaw — Google Apps Script Implementation
+ * SyllabOS — Google Apps Script Implementation
  * ==============================================
  * For students who prefer to work entirely in Google Drive
  * without installing anything on their computer.
@@ -12,18 +12,18 @@
  *    Get it at: https://build.nvidia.com (no credit card required)
  * 5. Click Save (Ctrl+S)
  * 6. Reload your Google Sheet
- * 7. A new "SyllaClaw" menu will appear in your Sheet
+ * 7. A new "SyllabOS" menu will appear in your Sheet
  *
  * HOW TO USE:
  * 1. Put your syllabus text in Sheet tabs named "Syllabus_1", "Syllabus_2", etc.
  *    OR paste your syllabus text directly into the "Input" tab
- * 2. Click SyllaClaw → Parse My Syllabi
+ * 2. Click SyllabOS → Parse My Syllabi
  * 3. Your deadlines appear in the "Deadlines" tab
- * 4. Click SyllaClaw → Build My Week
+ * 4. Click SyllabOS → Build My Week
  * 5. Your weekly schedule appears in the "Weekly Schedule" tab
- * 6. Click SyllaClaw → Push to Google Calendar (events are created instantly!)
+ * 6. Click SyllabOS → Push to Google Calendar (events are created instantly!)
  *
- * FREE TO USE. Open source. github.com/itsChanelML/syllaclaw
+ * FREE TO USE. Open source. github.com/itsChanelML/syllabos
  */
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ const CONFIG = {
   SEMESTER_END:    "2026-05-15",              // Last day of finals
   WAKE_TIME:       "07:00",                   // What time you wake up
   SLEEP_TIME:      "23:00",                   // What time you go to sleep
-  CALENDAR_NAME:   "SyllaClaw",               // Name of calendar to create
+  CALENDAR_NAME:   "SyllabOS",               // Name of calendar to create
 };
 
 const NIM_MODEL    = "nvidia/llama-3.3-nemotron-super-49b-v1";
@@ -47,7 +47,7 @@ const NIM_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 // ─────────────────────────────────────────────────────────────────────────────
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu("🦾 SyllaClaw")
+    .createMenu("🦾 SyllabOS")
     .addItem("1. Parse My Syllabi",        "parseSyllabi")
     .addSeparator()
     .addItem("2. Build My Week",           "buildWeek")
@@ -69,7 +69,7 @@ function parseSyllabi() {
 
   const ui    = SpreadsheetApp.getUi();
   const ss    = SpreadsheetApp.getActiveSpreadsheet();
-  const toast = (msg) => ss.toast(msg, "SyllaClaw", 5);
+  const toast = (msg) => ss.toast(msg, "SyllabOS", 5);
 
   toast("Reading your syllabi...");
 
@@ -128,7 +128,7 @@ function parseSyllabi() {
     "✓ Syllabi Parsed!",
     `Found ${allDeadlines.length} deadlines across ${syllabusSheets.length} course(s).\n\n` +
     "Check the 'Deadlines' tab to review them.\n\n" +
-    "Next: Run SyllaClaw → Build My Week",
+    "Next: Run SyllabOS → Build My Week",
     ui.ButtonSet.OK
   );
 }
@@ -163,7 +163,7 @@ function buildWeek() {
   // Get next Monday as week start
   const weekStart = getNextMonday();
 
-  ss.toast("Building your time-blocked week with NVIDIA NemoClaw...", "SyllaClaw", 10);
+  ss.toast("Building your time-blocked week with NVIDIA NemoClaw...", "SyllabOS", 10);
 
   // Get upcoming deadlines (next 14 days)
   const upcoming = deadlines.filter(d => {
@@ -185,12 +185,12 @@ function buildWeek() {
   // Write to Weekly Schedule sheet
   writeScheduleSheet(blocks, weekStart);
 
-  ss.toast(`✓ ${blocks.length} time blocks built for the week of ${weekStart}.`, "SyllaClaw", 8);
+  ss.toast(`✓ ${blocks.length} time blocks built for the week of ${weekStart}.`, "SyllabOS", 8);
   ui.alert(
     "✓ Week Built!",
     `${blocks.length} time blocks created for the week of ${weekStart}.\n\n` +
     "Check the 'Weekly Schedule' tab to review.\n\n" +
-    "Next: Run SyllaClaw → Push to Google Calendar",
+    "Next: Run SyllabOS → Push to Google Calendar",
     ui.ButtonSet.OK
   );
 }
@@ -220,14 +220,14 @@ function pushToCalendar() {
   );
   if (confirm !== ui.Button.YES) return;
 
-  ss.toast("Creating Google Calendar events...", "SyllaClaw", 10);
+  ss.toast("Creating Google Calendar events...", "SyllabOS", 10);
 
-  // Get or create SyllaClaw calendar
+  // Get or create SyllabOS calendar
   let calendar = CalendarApp.getCalendarsByName(CONFIG.CALENDAR_NAME)[0];
   if (!calendar) {
     calendar = CalendarApp.createCalendar(CONFIG.CALENDAR_NAME, {
       color:   CalendarApp.Color.TEAL,
-      summary: "Created by SyllaClaw — your academic life agent",
+      summary: "Created by SyllabOS — your academic life agent",
     });
   }
 
@@ -251,7 +251,7 @@ function pushToCalendar() {
             course ? `Course: ${course}` : "",
             type   ? `Type: ${type}`     : "",
             notes  ? notes               : "",
-            "Added by SyllaClaw",
+            "Added by SyllabOS",
           ].filter(Boolean).join(" | "),
         });
 
@@ -298,7 +298,7 @@ function pushToCalendar() {
             weight ? `Weight: ${weight}` : "",
             hours  ? `Est. study time: ${hours} hour(s)` : "",
             notes  ? notes : "",
-            "Added by SyllaClaw",
+            "Added by SyllabOS",
           ].filter(Boolean).join(" | "),
         });
         created++;
@@ -312,12 +312,12 @@ function pushToCalendar() {
     ? `✓ ${created} events created. ${errors} errors — some events may have been skipped.`
     : `✓ ${created} events created in your "${CONFIG.CALENDAR_NAME}" calendar!`;
 
-  ss.toast(msg, "SyllaClaw", 10);
+  ss.toast(msg, "SyllabOS", 10);
   ui.alert(
     "✓ Calendar Updated!",
     `${created} events added to Google Calendar.\n\n` +
     `Open Google Calendar to see your semester.\n\n` +
-    "Your SyllaClaw calendar is color-coded:\n" +
+    "Your SyllabOS calendar is color-coded:\n" +
     "🟦 Study blocks\n🔴 Exams\n🟡 Work shifts\n🟢 Free time\n🟣 Family calls",
     ui.ButtonSet.OK
   );
@@ -658,7 +658,7 @@ function showSetup() {
       .step { background: #E1F5EE; padding: 12px; border-left: 4px solid #1D9E75; margin: 12px 0; border-radius: 0 6px 6px 0; }
       a { color: #1D9E75; }
     </style>
-    <h2>🦾 SyllaClaw Setup Guide</h2>
+    <h2>🦾 SyllabOS Setup Guide</h2>
 
     <div class="step">
       <h3>Step 1 — Get your free NVIDIA NIM key</h3>
@@ -685,19 +685,19 @@ function showSetup() {
     </div>
 
     <div class="step">
-      <h3>Step 4 — Run SyllaClaw</h3>
-      <p>Click the <strong>SyllaClaw menu</strong> that appeared in your Sheet<br>
+      <h3>Step 4 — Run SyllabOS</h3>
+      <p>Click the <strong>SyllabOS menu</strong> that appeared in your Sheet<br>
       Click <strong>4. Full Run</strong> to do everything at once<br>
       Or run each step individually</p>
     </div>
 
     <p style="margin-top:20px; color: #666;">
       Free to use. Open source.<br>
-      <a href="https://github.com/itsChanelML/syllaclaw">github.com/itsChanelML/syllaclaw</a>
+      <a href="https://github.com/itsChanelML/syllabos">github.com/itsChanelML/syllabos</a>
     </p>
   `)
   .setWidth(480)
   .setHeight(560);
 
-  SpreadsheetApp.getUi().showModalDialog(html, "SyllaClaw Setup");
+  SpreadsheetApp.getUi().showModalDialog(html, "SyllabOS Setup");
 }

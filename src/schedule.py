@@ -1,5 +1,5 @@
 """
-SyllaClaw conflict detection and schedule utilities.
+SyllabOS conflict detection and schedule utilities.
 Pure Python logic — no API calls needed.
 """
 

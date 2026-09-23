@@ -1,5 +1,5 @@
 """
-SyllaClaw file reader.
+SyllabOS file reader.
 Extracts text from PDF, DOCX, and TXT files.
 Returns plain text for NIM to parse.
 """

@@ -1,5 +1,5 @@
 """
-SyllaClaw Agent — main orchestrator.
+SyllabOS Agent — main orchestrator.
 Ties together file reading, NIM parsing, schedule building, and CSV export.
 """
 
@@ -28,7 +28,7 @@ from exporter import (
 )
 
 
-class SyllaClawAgent:
+class SyllabOSAgent:
 
     def __init__(self, api_key: str, student_name: str = "Student",
                  student_email: str = "", output_dir: Path = None,
@@ -48,7 +48,7 @@ class SyllaClawAgent:
     # ── Entry point ────────────────────────────────────────────────────────────
 
     def run(self, folder: Path):
-        banner(f"SyllaClaw — Starting for {self.name}")
+        banner(f"SyllabOS — Starting for {self.name}")
         log_t(f"Folder   : {folder}")
         log_t(f"Week of  : {self.week_start}")
         log_t(f"Output   : {self.output_dir}")
@@ -275,7 +275,7 @@ class SyllaClawAgent:
             )
 
         div()
-        banner("SyllaClaw Complete", width=64)
+        banner("SyllabOS Complete", width=64)
         print()
         print(f"{TEAL}  Your Weekly Briefing:{RESET}")
         print()
@@ -326,5 +326,5 @@ class SyllaClawAgent:
 
         print()
         print(f"  {TEAL}Drop your syllabus. Get your life.{RESET}")
-        print(f"  {GRAY}github.com/itsChanelML/syllaclaw{RESET}")
+        print(f"  {GRAY}github.com/itsChanelML/syllabos{RESET}")
         print()

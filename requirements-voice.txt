@@ -1,0 +1,26 @@
+# SyllabOS — Morning Voice Briefing (optional)
+# Only needed for: --morning, --listen, --simulate-trigger, --calendar-auth
+# Install: pip3 install -r requirements-voice.txt
+#
+# The rest of SyllabOS (syllabus parsing, scheduling, CSV export, check-ins)
+# does not need any of this — it only depends on requirements.txt.
+
+# Timezone handling ("today" / deadline countdowns, correct across zones)
+tzdata>=2024.1
+tzlocal>=5.2
+
+# Read-only Google Calendar access (live "today" events)
+google-auth>=2.29.0
+google-auth-oauthlib>=1.2.0
+google-api-python-client>=2.126.0
+
+# Microphone recording + audio playback
+sounddevice>=0.4.6
+numpy>=1.24
+
+# Offline fallback text-to-speech (no API key, no network — used when NVIDIA
+# speech isn't configured/reachable, and for fully offline demos)
+pyttsx3>=2.90
+
+# NVIDIA Riva speech client (hosted ASR + TTS on grpc.nvcf.nvidia.com)
+nvidia-riva-client>=2.16.0

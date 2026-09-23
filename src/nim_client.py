@@ -1,5 +1,5 @@
 """
-SyllaClaw NIM client.
+SyllabOS NIM client.
 All NVIDIA API calls go through here.
 One model. One key. Everything runs through this file.
 """
@@ -335,3 +335,73 @@ Rules for the message:
 Return only the message text."""
 
     return _call(api_key, prompt, max_tokens=500, temperature=0.4)
+
+
+def write_morning_briefing(api_key: str, student_name: str, today_label: str,
+                            events_today: list, calendar_source: str,
+                            calendar_warning: Optional[str],
+                            deadlines_upcoming: list, deadlines_warning: Optional[str],
+                            study_blocks_today: list, study_warning: Optional[str],
+                            overload: dict) -> str:
+    """
+    Write a short, spoken morning briefing for the --morning / --listen voice
+    feature. Every fact below is real (or, in demo mode, clearly-labeled
+    sample data) — the prompt instructs the model not to add anything to it.
+    Returns the message as plain text meant to be read aloud.
+    """
+    first = student_name.split()[0] if student_name else "there"
+
+    events_str = "\n".join(
+        f"- {e.get('start', '')}: {e.get('title', '')}" for e in events_today
+    ) or "Nothing on the calendar for today."
+
+    deadlines_str = "\n".join(
+        f"- {d.get('course', '')}: {d.get('title', '')} due {d.get('date', '')}"
+        + (" [EXAM]" if d.get("type") == "exam" else "")
+        for d in deadlines_upcoming[:6]
+    ) or "Nothing due in the next 7 days."
+
+    study_str = "\n".join(
+        f"- {b.get('start_time', '')}-{b.get('end_time', '')}: {b.get('title', '')}"
+        for b in study_blocks_today
+    ) or "No study blocks scheduled today."
+
+    if overload.get("is_overloaded"):
+        overload_str = f"YES — {overload.get('reason', '')}"
+    else:
+        overload_str = "No — the coming week looks manageable."
+
+    warnings = [w for w in (calendar_warning, deadlines_warning, study_warning) if w]
+    warnings_str = "\n".join(f"- {w}" for w in warnings) or "None."
+
+    prompt = f"""Write a short, warm, spoken morning briefing for {first}.
+This will be read aloud by text-to-speech while they get ready, so keep it
+conversational and under 130 words. No headers, no bullet points, no markdown.
+
+Today: {today_label}
+Calendar source: {calendar_source}
+
+TODAY'S CALENDAR EVENTS (this is the complete, real list — do not add or assume any other event):
+{events_str}
+
+DEADLINES DUE IN THE NEXT 7 DAYS (complete, real list):
+{deadlines_str}
+
+STUDY TIME SCHEDULED TODAY (complete, real list):
+{study_str}
+
+IS THE COMING WEEK OVERLOADED: {overload_str}
+
+DATA CAVEATS (mention these plainly, in your own words, if present):
+{warnings_str}
+
+Rules:
+- Only reference events, deadlines, and study blocks explicitly listed above. Never invent a class, deadline, or free time block that isn't listed.
+- If a section says "Nothing" or "No study blocks", say that honestly instead of making something up.
+- If there are data caveats, mention them briefly and plainly (e.g. "heads up, I couldn't reach your live calendar so this is from your last export").
+- End with one short, genuine line of encouragement.
+- Sound like a capable, friendly personal assistant, not a robot reading a list.
+
+Return only the spoken text."""
+
+    return _call(api_key, prompt, max_tokens=350, temperature=0.4)

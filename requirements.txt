@@ -1,4 +1,4 @@
-# SyllaClaw — Academic Life Management Agent
+# SyllabOS — Academic Life Management Agent
 # Install: pip3 install -r requirements.txt
 
 requests>=2.31.0
