@@ -222,8 +222,11 @@ function pushToCalendar() {
 
   ss.toast("Creating Google Calendar events...", "SyllabOS", 10);
 
-  // Get or create SyllabOS calendar
-  let calendar = CalendarApp.getCalendarsByName(CONFIG.CALENDAR_NAME)[0];
+  // Get or create the SyllabOS calendar — reuse a pre-rebrand "SyllaClaw"
+  // calendar if that's what this student already has, so existing events
+  // stay in one place instead of forking into a second calendar.
+  let calendar = CalendarApp.getCalendarsByName(CONFIG.CALENDAR_NAME)[0]
+    || CalendarApp.getCalendarsByName("SyllaClaw")[0];
   if (!calendar) {
     calendar = CalendarApp.createCalendar(CONFIG.CALENDAR_NAME, {
       color:   CalendarApp.Color.TEAL,
