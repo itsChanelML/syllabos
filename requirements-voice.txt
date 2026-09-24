@@ -23,4 +23,9 @@ numpy>=1.24
 pyttsx3>=2.90
 
 # NVIDIA Riva speech client (hosted ASR + TTS on grpc.nvcf.nvidia.com)
-nvidia-riva-client>=2.16.0
+# Pinned exactly: newer releases (2.17.0+) ship generated gRPC stubs that
+# require grpcio>=1.81.0, which isn't available on Python 3.9 (grpcio caps
+# at 1.80.0 there). 2.16.0 is the newest release confirmed compatible with
+# Python 3.9's grpcio ceiling. On Python 3.10+ you can likely use a newer
+# version — this pin only matters if you're still on 3.9.
+nvidia-riva-client==2.16.0

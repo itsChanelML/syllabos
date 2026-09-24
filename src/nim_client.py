@@ -11,7 +11,7 @@ from typing import Any, Optional
 
 import requests
 
-MODEL    = "meta/llama-3.2-90b-vision-instruct"
+MODEL    = "meta/llama-3.2-11b-vision-instruct"
 ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions"
 TIMEOUTS = [120, 150, 180]
 

@@ -43,6 +43,17 @@ def _import_riva():
             "NVIDIA speech needs the Riva client library.\n"
             "Fix: pip3 install -r requirements-voice.txt"
         ) from e
+    except Exception as e:
+        # riva.client's generated gRPC stubs raise a plain RuntimeError (not
+        # ImportError) when the installed grpcio version doesn't match what
+        # they were generated against — this happens on Python 3.9, which is
+        # capped at grpcio 1.80.0 while some riva releases need >=1.81.0.
+        # Treat any import-time failure the same way: fall back, don't crash.
+        raise VoiceDependencyError(
+            f"NVIDIA speech (Riva client) failed to load: {e}\n"
+            "Fix: try `pip3 install -U nvidia-riva-client` for a version matching your "
+            "installed grpcio, or set VOICE_PROVIDER=system to use the offline voice instead."
+        ) from e
 
 
 def _import_audio():

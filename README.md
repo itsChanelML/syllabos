@@ -141,6 +141,8 @@ When a file cannot be read or the requested plan cannot be completed, SyllabOS s
 | No microphone is available | Use `--morning` or press **Enter** during `--listen`. |
 | Speech support is missing | Install `requirements-voice.txt` and check the function IDs in `.env`. |
 | The day or deadline countdown seems wrong | Set `STUDENT_TIMEZONE` to your IANA time zone, such as `America/New_York`. |
+| NVIDIA speech fails with a `grpc` version error | On Python 3.9, `grpcio` caps at 1.80.0, but `nvidia-riva-client` releases newer than 2.16.0 need `grpcio>=1.81.0` and fail to import. `requirements-voice.txt` pins `nvidia-riva-client==2.16.0` for this reason — reinstall with `pip3 install -r requirements-voice.txt` if you've since upgraded it. On Python 3.10+ this doesn't apply. |
+| A NIM call is unusually slow or times out | Model availability/load on NVIDIA's hosted endpoints can vary. Check `MODEL` in `src/nim_client.py`, and try an alternate model from your account's list (`GET https://integrate.api.nvidia.com/v1/models` with your API key) if it's persistent. |
 
 Run the included unit tests with:
 

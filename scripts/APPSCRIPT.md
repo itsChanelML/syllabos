@@ -39,7 +39,7 @@ const CONFIG = {
   CALENDAR_NAME:   "SyllabOS",               // Name of calendar to create
 };
 
-const NIM_MODEL    = "nvidia/llama-3.3-nemotron-super-49b-v1";
+const NIM_MODEL    = "meta/llama-3.2-11b-vision-instruct";
 const NIM_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // ─────────────────────────────────────────────────────────────────────────────
