@@ -1,5 +1,5 @@
 """
-Wake-phrase matching for "Good morning, Sunshine", plus the keyboard
+Wake-phrase matching for "Good morning, Sylvia", plus the keyboard
 fallback listener used when no microphone/ASR is available, or the room is
 too noisy for reliable speech recognition.
 """
@@ -9,19 +9,26 @@ import threading
 from difflib import SequenceMatcher
 from typing import Callable
 
-TRIGGER_PHRASE = "good morning sunshine"
+TRIGGER_PHRASE = "good morning sylvia"
+WAKE_WORD = "sylvia"
 
 
 def _normalize(text: str) -> str:
     return re.sub(r"[^a-z ]", " ", text.lower()).strip()
-    # note: non-letters become spaces (not dropped) so "sunshine!" and
-    # "sunshine," don't get glued to neighboring words.
+    # note: non-letters become spaces (not dropped) so "sylvia!" and
+    # "sylvia," don't get glued to neighboring words.
 
 
 def matches_trigger(text: str, threshold: float = 0.72) -> bool:
     """
-    True if `text` is a plausible utterance of "Good morning, Sunshine",
+    True if `text` is a plausible utterance of "Good morning, Sylvia",
     tolerant of ASR casing/punctuation noise and small transcription errors.
+
+    Requires "good morning" plus a word that's actually close to "sylvia" —
+    matching on whole-phrase string similarity alone let other short
+    "good morning <name>" phrases (e.g. the old wake word) slip past, since
+    the shared "good morning" prefix alone was often enough to clear the
+    threshold regardless of the name.
     """
     if not text:
         return False
@@ -33,11 +40,13 @@ def matches_trigger(text: str, threshold: float = 0.72) -> bool:
     if TRIGGER_PHRASE in normalized:
         return True
 
-    if "good morning" in normalized and "sunshine" in normalized:
-        return True
+    if "good morning" not in normalized:
+        return False
 
-    ratio = SequenceMatcher(None, normalized, TRIGGER_PHRASE).ratio()
-    return ratio >= threshold
+    return any(
+        word == WAKE_WORD or SequenceMatcher(None, word, WAKE_WORD).ratio() >= threshold
+        for word in normalized.split()
+    )
 
 
 class KeyboardFallback:

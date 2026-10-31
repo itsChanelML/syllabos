@@ -12,7 +12,7 @@ Usage:
   python3 syllabos.py --break            # ESCALATE demo beat
   python3 syllabos.py --checkin          # Sunday check-in — update your profile
   python3 syllabos.py --morning          # speak today's morning briefing now
-  python3 syllabos.py --listen           # listen for "Good morning, Sunshine"
+  python3 syllabos.py --listen           # listen for "Good morning, Sylvia"
   python3 syllabos.py --calendar-auth    # one-time Google Calendar (read-only) setup
 
 Requirements:
@@ -81,7 +81,7 @@ Examples:
     parser.add_argument("--morning",  action="store_true",
                         help="Generate and speak today's morning briefing right now")
     parser.add_argument("--listen",   action="store_true",
-                        help='Listen for the spoken trigger "Good morning, Sunshine" '
+                        help='Listen for the spoken trigger "Good morning, Sylvia" '
                              "(microphone + keyboard fallback)")
     parser.add_argument("--simulate-trigger", type=str, default=None, metavar="TEXT",
                         help="Feed TEXT through the wake-phrase matcher to demo the "
@@ -281,7 +281,7 @@ def _run_simulate_trigger(args, api_key: str):
     log_t(f'\n  Simulated microphone input: "{heard}"')
 
     if not matches_trigger(heard):
-        log_a('  Not recognized as "Good morning, Sunshine" — try wording it closer to the trigger phrase.\n')
+        log_a('  Not recognized as "Good morning, Sylvia" — try wording it closer to the trigger phrase.\n')
         sys.exit(1)
 
     log_g("  Trigger recognized! Generating the morning briefing...")

@@ -2,7 +2,7 @@
 Orchestrates `--listen`: repeatedly records short audio clips (if NVIDIA
 speech recognition is available) and/or waits for the ENTER-key fallback,
 firing the morning briefing the first time either one recognizes
-"Good morning, Sunshine". Runs only while the script is running — there is
+"Good morning, Sylvia". Runs only while the script is running — there is
 no background daemon or persistence.
 """
 
@@ -31,7 +31,7 @@ def run_listen_loop(stt, on_trigger: Callable[[], None], once: bool = False,
     keyboard = KeyboardFallback(on_trigger=fire)
     keyboard.start()
 
-    log_t('Listening for "Good morning, Sunshine"...')
+    log_t('Listening for "Good morning, Sylvia"...')
     log_gr("  Press ENTER at any time to trigger the briefing manually.")
     log_gr("  Ctrl+C to stop listening.\n")
 
@@ -44,7 +44,7 @@ def run_listen_loop(stt, on_trigger: Callable[[], None], once: bool = False,
                 on_trigger()
                 if once:
                     break
-                log_t('\nListening again for "Good morning, Sunshine"...')
+                log_t('\nListening again for "Good morning, Sylvia"...')
                 continue
 
             if stt is None:

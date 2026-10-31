@@ -74,10 +74,10 @@ The second command uses clearly labeled sample data, so you can preview the brie
 ```bash
 python3 syllabos.py --morning             # Generate and speak today's briefing
 python3 syllabos.py --morning --text-only # Read it on screen
-python3 syllabos.py --listen              # Listen for "Good morning, Sunshine"
+python3 syllabos.py --listen              # Listen for "Good morning, Sylvia"
 ```
 
-`--listen` runs only while the script is open. Press **Enter** to trigger the same briefing if a microphone is unavailable or the room is noisy. For a reliable workshop demonstration, `python3 syllabos.py --simulate-trigger "Good morning, Sunshine" --demo` exercises the phrase trigger with sample data.
+`--listen` runs only while the script is open. Press **Enter** to trigger the same briefing if a microphone is unavailable or the room is noisy. For a reliable workshop demonstration, `python3 syllabos.py --simulate-trigger "Good morning, Sylvia" --demo` exercises the phrase trigger with sample data.
 
 ### Connect Google Calendar for current events
 

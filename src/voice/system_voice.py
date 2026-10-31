@@ -7,7 +7,7 @@ silently) whenever NVIDIA speech isn't configured or isn't reachable, and the
 provider used for a fully offline workshop demo.
 
 There is no offline speech-to-text counterpart here on purpose — reliably
-recognizing "Good morning, Sunshine" without a cloud model is out of scope
+recognizing "Good morning, Sylvia" without a cloud model is out of scope
 for this project. Use the keyboard fallback instead (see trigger.py).
 """
 
